@@ -7,29 +7,48 @@ function App() {
   const mapElement = useRef(null);
   Mapbox.accessToken = process.env.MAPBOX_API_KEY;
 
-  const [longitude, setLongitude] = useState(12.377494305521509);
-  const [langitude, setLangitude] = useState(56.047455233646566);
+  const [longitude, setLongitude] = useState('');
+  const [langitude, setLangitude] = useState('');
 
   useEffect(() => {
     map = new Mapbox.Map({
       container: mapElement.current,
       style: 'mapbox://styles/mapbox/dark-v10',
       zoom: 17,
-      center: [longitude, langitude]
+      center: [12.377494305521509, 56.047455233646566]
     });
+    // MARKERS FOR EACH ANIMAL
+
+    // BAT
+    const batMarker = new Mapbox.Marker;
+      batMarker.setLngLat([12.378475332168, 56.047321016463]);
+      batMarker.addTo(map);
+
+    // MOTH
+    const mothMarker = new Mapbox.Marker;
+    mothMarker.setLngLat([12.379846219272002, 56.04709317869029])
+    mothMarker.addTo(map)
+
+    // BADGER
+    const badgerMarker = new Mapbox.Marker;
+    badgerMarker.setLngLat([12.380466580627711, 56.048016754614196])
+    badgerMarker.addTo(map)
   }, []);
 
   // GO TO LOCATION ON COORDINATES INPUT
+  // const handleInput = (event) => {
+  //   event.preventDefault();    
 
-  const inputLongitude = (event) => {
-    event.preventDefault();
-    setLongitude(event.target.value)
-  }
-  
-  const inputLangitude = (event) => {
-    event.preventDefault();
-    setLangitude(event.target.value)
-  }
+  //   const inputLongitude = (event) => {
+  //     event.preventDefault();
+  //     setLongitude(event.target.value)
+  //   }
+    
+  //   const inputLangitude = (event) => {
+  //     event.preventDefault();
+  //     setLangitude(event.target.value)
+  //   }
+  // }
 
   // GO TO LOCATION ON BUTTON CLICK
   const batsHabitat = () => {
@@ -52,18 +71,22 @@ function App() {
       zoom: 18
     })
   }
+
+  
+  
+  
   return (
     <>
       <h1>Nocturnal Animals</h1>
       <h2>Press on the desired animal to see were it lives</h2>
       
-      <form>
-        <label htmlFor="form">Do you know the location of a specifik animal? Type in the langitudes and lingitudes in the field below and press go.</label> <br/>
-        <input onSubmit={inputLangitude} type="text" placeholder="Ex: -40(langitude)"/>
-        <input onSubmit={inputLongitude} type="text" placeholder="Ex: -70 (longitude)"/>
-        <button>GO</button>
+      {/* <form>
+        <label htmlFor="form">Do you know the location of a specific animal? Type in the langitudes and lingitudes in the field below and press go.</label> <br/>
+        <input type="text" placeholder="Eg: -40(langitude)" onChange={event => inputLangitude(event)}/>
+        <input type="text" placeholder="Eg: -70 (longitude)" onChange={event => inputLongitude(event)}/>
+        <button type="submit" onClick={event => handleInput(event)}>GO</button>
 
-      </form>
+      </form> */}
       
       <br/>
       <br/>
