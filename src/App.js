@@ -2,38 +2,56 @@ import React, { useEffect, useState, useRef } from 'react';
 import Mapbox from 'mapbox-gl';
 
 function App() {
-  Mapbox.accessToken = process.env.MAPBOX_API_KEY;
 
   let map;
   const mapElement = useRef(null);
+  Mapbox.accessToken = process.env.MAPBOX_API_KEY;
+
+  const [longitude, setLongitude] = useState(12.377494305521509);
+  const [langitude, setLangitude] = useState(56.047455233646566);
 
   useEffect(() => {
     map = new Mapbox.Map({
       container: mapElement.current,
       style: 'mapbox://styles/mapbox/dark-v10',
       zoom: 17,
-      center: [12.377494305521509, 56.047455233646566]
+      center: [longitude, langitude]
     });
   }, []);
 
   // GO TO LOCATION ON COORDINATES INPUT
 
+  const inputLongitude = (event) => {
+    setLongitude
+  }
+  
+  const inputLangitude = (event) => {
+
+  }
+
   // GO TO LOCATION ON BUTTON CLICK
-
   // Ændre denne til flyTo()!
-  function batsHabitat() {
-    map.setCenter([12.378475332168, 56.047321016463]),
-    map.setZoom(18)
+
+  const batsHabitat = () => {
+    map.flyTo({
+      center: [12.378475332168, 56.047321016463],
+      zoom: 18
+    })
   }
-  function mothsHabitat() {
-    map.setCenter([12.37826979015567, 56.0477519437771]), 
-    map.setZoom(18)
-  }
-  function badgersHabitat() {
-    map.setCenter([12.380466580627711, 56.048016754614196]), 
-    map.setZoom(18)
+  
+  const mothsHabitat = () => {
+    map.flyTo({
+      center: [12.37826979015567, 56.0477519437771],
+      zoom: 18
+    })
   }
 
+  const badgersHabitat = () => {
+    map.flyTo({
+      center: [12.380466580627711, 56.048016754614196],
+      zoom: 18
+    })
+  }
   return (
     <>
       <h1>Nocturnal Animals</h1>
