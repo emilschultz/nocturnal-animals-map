@@ -22,16 +22,16 @@ function App() {
   // GO TO LOCATION ON COORDINATES INPUT
 
   const inputLongitude = (event) => {
-    setLongitude
+    event.preventDefault();
+    setLongitude(event.target.value)
   }
   
   const inputLangitude = (event) => {
-
+    event.preventDefault();
+    setLangitude(event.target.value)
   }
 
   // GO TO LOCATION ON BUTTON CLICK
-  // Ændre denne til flyTo()!
-
   const batsHabitat = () => {
     map.flyTo({
       center: [12.378475332168, 56.047321016463],
@@ -41,7 +41,7 @@ function App() {
   
   const mothsHabitat = () => {
     map.flyTo({
-      center: [12.37826979015567, 56.0477519437771],
+      center: [12.379846219272002, 56.04709317869029],
       zoom: 18
     })
   }
@@ -56,9 +56,15 @@ function App() {
     <>
       <h1>Nocturnal Animals</h1>
       <h2>Press on the desired animal to see were it lives</h2>
+      
+      <form>
+        <label htmlFor="form">Do you know the location of a specifik animal? Type in the langitudes and lingitudes in the field below and press go.</label> <br/>
+        <input onSubmit={inputLangitude} type="text" placeholder="Ex: -40(langitude)"/>
+        <input onSubmit={inputLongitude} type="text" placeholder="Ex: -70 (longitude)"/>
+        <button>GO</button>
 
-      <input type="text" placeholder="Ex: -40, 70 (lang, long)"/>
-      <button>GO</button>
+      </form>
+      
       <br/>
       <br/>
 
