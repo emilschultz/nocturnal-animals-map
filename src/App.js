@@ -11,6 +11,7 @@ function App() {
 
   const [longitude, setLongitude] = useState(12.377494305521509);
   const [langitude, setLangitude] = useState(56.047455233646566);
+  const [inputData, setInputData] = useState('');
   const [info, setInfo] = useState('');
   
 
@@ -50,30 +51,11 @@ function App() {
 
     const showInfo = () => {
       const pos = newMarker.getLngLat();
-      // console.log("lng: " + pos.lng)
-      // console.log("lat: " + pos.lat)
-      const INFO = [pos.lng, " ", " ", pos.lat]
-      setInfo(INFO)
+      const getPlacement = [pos.lng, " ", pos.lat]
+      setInfo(getPlacement)
     }
     newMarker.on('dragend', showInfo)
   }, []);
-
-  // MARKERS FOR EACH ANIMAL
-  
-
-  // GO TO LOCATION ON COORDINATES INPUT
-  // const handleInput = (event) => {
-  //   event.preventDefault();    
-
-    // const inputLongitude = (event) => {
-    //   setLongitude(event.target.value)
-    // }
-    
-  //   const inputLatitude = (event) => {
-  //     event.preventDefault();
-  //     setLangitude(event.target.value)
-  //   }
-  // }
 
   // GO TO LOCATION ON BUTTON CLICK
   const batsHabitat = () => {
@@ -97,19 +79,53 @@ function App() {
     })
   }
 
+   // GO TO LOCATION ON COORDINATES INPUT
+
+
+    const inputLongitude = (event) => {
+      event.preventDefault();
+      setInputData(event.target.value)
+    }
+    
+  //   const inputLatitude = (event) => {
+  //     event.preventDefault();
+  //     setLangitude(event.target.value)
+  //   }
+  // }
   
   
+  // BRUGERENS NUVÆRENDE POSITION
+  const getMyPosition = () => {
+    navigator.geolocation.getCurrentPosition(myPos => {
+      map.flyTo({
+        center: [myPos.coords.longitude, myPos.coords.latitude],
+        zoom: 20
+      })
+    });
+  }
+
+  // navigator.geolocation.getCurrentPosition(minpos => {
   
+  //   map.flyTo(
+  //     {
+  //       center: [minpos.coords.longitude, minpos.coords.latitude],
+  //       zoom: 17
+  //     }
+  //   )
+    
+  // });
+
+
   return (
     <>
       <h1>Nocturnal Animals</h1>
       <h2>Press on the desired animal to see were it lives</h2>
       
       <form>
-        <label htmlFor="form">Do you know the location of a specific animal? Type in the langitudes and lingitudes in the field below and press go.</label> <br/>
-        {/* <input type="text" placeholder="Eg: -40(langitude)" onChange={event => inputLatitude(event)}/> */}
-        <input type="text" placeholder="Eg: -70 (longitude)" onChange={event => inputLongitude(event)}/>
-        <button type="submit" onClick={event => handleInput(event)}>GO</button>
+        <label htmlFor="form">Do you know the location of a specific animal? Type in the latitudes and longitudes in the field below and press go.</label> <br/>
+        <input type="text" placeholder="Eg: -40(latitude)"/>
+        <input type="text" placeholder="Eg: -70 (longitude)"/>
+        <button type="submit" onClick={event => inputLongitude(event), event => inputLatitude(event)}>GO</button>
 
       </form>
       
@@ -119,12 +135,12 @@ function App() {
       <button onClick={batsHabitat}>Bat</button>
       <button onClick={mothsHabitat}>Moth</button>
       <button onClick={badgersHabitat}>Badger</button>
+      <br/>
+      <button onClick={getMyPosition}>Her er du</button>
       
       <div style={{height: '400px'}} ref={mapElement}></div>
 
-      <p>Her er den: {info}</p>
-
-      
+      <p>Her er den: {info}</p>      
     </>
   )
 };
