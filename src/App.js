@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Mapbox, { Marker } from 'mapbox-gl';
+// STYLES
+import GlobalStyle from './components/GlobalStyle';
+import InputField from './components/inputField';
 
 function App() {
 
@@ -11,7 +14,6 @@ function App() {
 
   const [longitude, setLongitude] = useState(12.377494305521509);
   const [langitude, setLangitude] = useState(56.047455233646566);
-  const [inputData, setInputData] = useState('');
   const [info, setInfo] = useState('');
   
 
@@ -82,10 +84,10 @@ function App() {
    // GO TO LOCATION ON COORDINATES INPUT
 
 
-    const inputLongitude = (event) => {
-      event.preventDefault();
-      setInputData(event.target.value)
-    }
+  //   const inputLongitude = (event) => {
+  //     event.preventDefault();
+  //     setLongitude(event.target.value)
+  //   }
     
   //   const inputLatitude = (event) => {
   //     event.preventDefault();
@@ -103,28 +105,16 @@ function App() {
       })
     });
   }
-
-  // navigator.geolocation.getCurrentPosition(minpos => {
   
-  //   map.flyTo(
-  //     {
-  //       center: [minpos.coords.longitude, minpos.coords.latitude],
-  //       zoom: 17
-  //     }
-  //   )
-    
-  // });
-
-
   return (
     <>
+      <GlobalStyle/>
       <h1>Nocturnal Animals</h1>
       <h2>Press on the desired animal to see were it lives</h2>
-      
       <form>
         <label htmlFor="form">Do you know the location of a specific animal? Type in the latitudes and longitudes in the field below and press go.</label> <br/>
-        <input type="text" placeholder="Eg: -40(latitude)"/>
-        <input type="text" placeholder="Eg: -70 (longitude)"/>
+        <InputField type="text" name="longitudes" placeholder="Eg: -70 (longitude)"/>
+        <InputField type="text" name="latitude" placeholder="Eg: -40(latitude)"/>
         <button type="submit" onClick={event => inputLongitude(event), event => inputLatitude(event)}>GO</button>
 
       </form>
@@ -140,7 +130,7 @@ function App() {
       
       <div style={{height: '400px'}} ref={mapElement}></div>
 
-      <p>Her er den: {info}</p>      
+      <p>Dit dyr er på disse koordinater: {info}</p>      
     </>
   )
 };
