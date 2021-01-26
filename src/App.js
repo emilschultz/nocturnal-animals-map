@@ -4,28 +4,180 @@ import Mapbox, { Marker } from 'mapbox-gl';
 import GlobalStyle from './components/GlobalStyle';
 import InputField from './components/inputField';
 
+export const geoJson = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            12.378442883491514,
+            56.04747411680988
+          ],
+          [
+            12.37809419631958,
+            56.04724192157593
+          ],
+          [
+            12.378542125225067,
+            56.04707713701363
+          ],
+          [
+            12.378896176815031,
+            56.04733479983721
+          ],
+          [
+            12.37845629453659,
+            56.04748610104211
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            12.379963696002958,
+            56.04724341961418
+          ],
+          [
+            12.379301190376282,
+            56.04724341961418
+          ],
+          [
+            12.379223406314848,
+            56.046891379026775
+          ],
+          [
+            12.380502820014952,
+            56.04684943355111
+          ],
+          [
+            12.380500137805937,
+            56.04723592942236
+          ],
+          [
+            12.380296289920805,
+            56.04733330180252
+          ],
+          [
+            12.380001246929169,
+            56.047247913728555
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            12.380148768424988,
+            56.04832199205295
+          ],
+          [
+            12.380103170871735,
+            56.04791004086135
+          ],
+          [
+            12.381066083908081,
+            56.04781866200091
+          ],
+          [
+            12.381143867969513,
+            56.04843284362244
+          ],
+          [
+            12.38017290830612,
+            56.04833397602175
+          ]
+        ]
+      }
+    }
+  ]
+}
+
+
 function App() {
 
-  let map;
   const mapElement = useRef(null);
-
 
   Mapbox.accessToken = process.env.MAPBOX_API_KEY;
 
-  const [longitude, setLongitude] = useState(12.377494305521509);
-  const [langitude, setLangitude] = useState(56.047455233646566);
+  const [longitude, setLongitude] = useState('');
+  const [langitude, setLangitude] = useState('');
   const [info, setInfo] = useState('');
   
+  let map = null;
+
 
   useEffect(() => {
     map = new Mapbox.Map({
       container: mapElement.current,
       style: 'mapbox://styles/mapbox/dark-v10',
       zoom: 17,
-      center: [longitude, langitude]
-    });
+      center: [12.377494305521509, 56.047455233646566]
+    })
+      .on('load', () => {
+        map.addSource('bat', {
+          type: 'geojson',
+          data: geoJson
+        });
 
-    //------------------------------------------------------------------
+        map.addLayer({
+          id: 'bat-layer',
+          type: 'fill',
+          source: 'bat',
+          layout: {},
+          paint: { 
+            'fill-color': '#ffffff',
+            'fill-opacity': 0.2
+          }
+        })
+      })
+      .on('load', () => {
+        map.addSource('moth', {
+          type: 'geojson',
+          data: geoJson
+        });
+
+        map.addLayer({
+          id: 'moth-layer',
+          type: 'fill',
+          source: 'moth',
+          layout: {},
+          paint: {
+            'fill-color': '#ffffff',
+            'fill-opacity': 0.2
+          } 
+        })
+        .on('load', () => {
+          map.addSource('badger', {
+            type: 'geojson',
+            data: geoJson
+          });
+
+          map.addLayer({
+            id: 'badger-layer',
+            type: 'fill',
+            source: 'badger',
+            layout: {},
+            paint: {
+              'fill-color': '#ffffff',
+              'fill-opacity': 0.2
+            }
+          })
+        })
+      })
+      // .on('click', event => handelMapClick(event))
 
     // MARKERS FOR EACH ANIMAL
 
@@ -47,17 +199,40 @@ function App() {
     //------------------------------------------------------------------
 
     // CUSTOM MARKER
-    const newMarker = new Marker({ draggable: true });
-    newMarker.setLngLat([longitude, langitude])
-    newMarker.addTo(map)
+    // const newMarker = new Marker({ draggable: false });
+    // newMarker.setLngLat([longitude, langitude])
+    // newMarker.addTo(map)
 
-    const showInfo = () => {
-      const pos = newMarker.getLngLat();
-      const getPlacement = [pos.lng, " ", pos.lat]
-      setInfo(getPlacement)
-    }
-    newMarker.on('dragend', showInfo)
+    // const showInfo = () => {
+    //   const pos = newMarker.getLngLat();
+    //   const getPlacement = [pos.lng, " ", pos.lat]
+    //   setInfo(getPlacement)
+    // }
+    // newMarker.on('dragend', showInfo)
   }, []);
+
+  // GET LOCATION OF CURSORCLICK
+
+  // const handelMapClick = () => {
+  //   let el = document.createElement('div');
+  //   el.style.display = 'block';
+  //   el.style.width = '40px';
+  //   el.style.height = '40px';
+  //   el.style.backgroundImage = 'url("https://images.unsplash.com/photo-1611602132337-c39a54b457f4?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60")';
+  //   el.style.backgroundSize = '40px 40px';
+
+  //   const anotherMarker = new Mapbox.Marker()
+  //     .setLngLat(event.[longitude, latitude]);
+
+  //   if(marker !== null){
+  //     marker.remove();
+  //   }
+
+  //   anotherMarker.addTo(map);
+  //   marker = anotherMarker;
+  // }
+
+  // handelMapClick();
 
   // GO TO LOCATION ON BUTTON CLICK
   const batsHabitat = () => {
