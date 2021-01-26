@@ -105,6 +105,8 @@ export const geoJson = {
   ]
 }
 
+let map = null;
+let marker = null;
 
 function App() {
 
@@ -116,7 +118,6 @@ function App() {
   const [langitude, setLangitude] = useState('');
   const [info, setInfo] = useState('');
   
-  let map = null;
 
 
   useEffect(() => {
@@ -126,6 +127,9 @@ function App() {
       zoom: 17,
       center: [12.377494305521509, 56.047455233646566]
     })
+      .on('click', event => handelMapClick(event))
+
+
       .on('load', () => {
         map.addSource('bat', {
           type: 'geojson',
@@ -177,7 +181,6 @@ function App() {
           })
         })
       })
-      // .on('click', event => handelMapClick(event))
 
     // MARKERS FOR EACH ANIMAL
 
@@ -213,26 +216,30 @@ function App() {
 
   // GET LOCATION OF CURSORCLICK
 
-  // const handelMapClick = () => {
-  //   let el = document.createElement('div');
-  //   el.style.display = 'block';
-  //   el.style.width = '40px';
-  //   el.style.height = '40px';
-  //   el.style.backgroundImage = 'url("https://images.unsplash.com/photo-1611602132337-c39a54b457f4?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60")';
-  //   el.style.backgroundSize = '40px 40px';
+  const handelMapClick = (event) => {
+    let el = document.createElement('div');
+    el.style.display = 'block';
+    el.style.width = '40px';
+    el.style.height = '40px';
+    el.style.backgroundImage = 'url("https://www.svgrepo.com/show/315215/binocular.svg")';
+    el.style.backgroundSize = '40px 40px';
 
-  //   const anotherMarker = new Mapbox.Marker()
-  //     .setLngLat(event.[longitude, latitude]);
+    el.addEventListener('click', () => {
+      console.log('hei')
+    });
 
-  //   if(marker !== null){
-  //     marker.remove();
-  //   }
+    const newMarker = new Mapbox.Marker(el)
+      .setLngLat(event.lngLat);
 
-  //   anotherMarker.addTo(map);
-  //   marker = anotherMarker;
-  // }
+    if(marker !== null){
+      marker.remove();
+    }
 
-  // handelMapClick();
+    newMarker.addTo(map);
+    marker = newMarker;
+  }
+
+  
 
   // GO TO LOCATION ON BUTTON CLICK
   const batsHabitat = () => {
